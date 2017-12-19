@@ -14,6 +14,8 @@ def createAccount():
     db = Db()
     db.createAccount(input("Username: "), getpass.getpass("Password: "))
     db.exit()
+def deleteAccount():
+    pass
 
 def check(x, action, *args, **kwargs):
     if x:
@@ -30,12 +32,14 @@ def execute(s):
     except IndexError:
         pass
 
-
     result = re.findall(r'[Tt]ime', s)
     if check(result, showTime): return True
 
     result = re.findall(r'(?:[Cc]reate|[Aa]dd).+(?:[Uu]ser|[Aa]ccount)', s)
     if check(result, createAccount): return True
+
+    result = re.findall(r'[Dd]el.*\s+(?:[Uu]ser|[Aa]ccount)', s)
+    if check(result, deleteAccount): return True
 
     return False
     

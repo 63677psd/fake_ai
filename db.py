@@ -28,17 +28,37 @@ class Db:
             self.setupDb()
             return False
     def createAccount(self, username, password):
-        self.cursor.execute("SELECT * FROM users WHERE " \
-                            "username=?", (username,))
-        if self.cursor.fetchone() is not None:
+        try:
+            self.cursor.execute("SELECT * FROM users WHERE " \
+                                "username=?", (username,))
+            if self.cursor.fetchone() is not None:
+                return False
+            else:
+                self.cursor.execute("""
+                    INSERT INTO users(username, password)
+                    VALUES(?,?)
+                """, (username, self._encode(password)))
+                self.db.commit()
+                return True
+        except sqlite3.OperationalError:
+            self.setupDb()
             return False
-        else:
-            self.cursor.execute("""
-                INSERT INTO users(username, password)
-                VALUES(?,?)
-            """, (username, self._encode(password)))
-            self.db.commit()
-            return True
+    def deleteAccount(self, username):
+        try:
+            self.cursor.execute("SELECT * FROM users WHERE " \
+                                "username=?", (username,))
+            if self.cursor.fetchone() is None:
+                return False
+            else:
+                self.cursor.execute("""
+                    DELETE FROM users WHERE username=?
+                """, (username,))
+                self.db.commit()
+                return True
+        except sqlite3.OperationalError:
+            self.setupDb()
+            return False
+        
     def _encode(self, s):
         s = str(s)
         s = s.encode("utf-8")
