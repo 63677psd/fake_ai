@@ -26,6 +26,7 @@ class Db:
                 return True
         except sqlite3.OperationalError:
             self.setupDb()
+            return False
     def createAccount(self, username, password):
         self.cursor.execute("SELECT * FROM users WHERE " \
                             "username=?", (username,))
