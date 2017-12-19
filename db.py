@@ -17,12 +17,15 @@ class Db:
         """)
         self.db.commit()
     def loginCheck(self, username, password):
-        self.cursor.execute("SELECT * FROM users WHERE " \
-                            "username=? AND password=?", (username, self._encode(password)))
-        if self.cursor.fetchone() is None:
-            return False
-        else:
-            return True
+        try:
+            self.cursor.execute("SELECT * FROM users WHERE " \
+                                "username=? AND password=?", (username, self._encode(password)))
+            if self.cursor.fetchone() is None:
+                return False
+            else:
+                return True
+        except sqlite3.OperationalError:
+            self.setupDb()
     def createAccount(self, username, password):
         self.cursor.execute("SELECT * FROM users WHERE " \
                             "username=?", (username,))
