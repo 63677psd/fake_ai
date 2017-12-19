@@ -34,7 +34,7 @@ def execute(s):
     result = re.findall(r'[Tt]ime', s)
     if check(result, showTime): return True
 
-    result = re.findall(r'(?:[Cc]reate|[Aa]dd)\s(?:[Uu]ser|[Aa]ccount)', s)
+    result = re.findall(r'(?:[Cc]reate|[Aa]dd).+(?:[Uu]ser|[Aa]ccount)', s)
     if check(result, createAccount): return True
 
     return False
