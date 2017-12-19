@@ -12,10 +12,18 @@ def openWebpage(x):
     "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s").open(str(x))
 def createAccount():
     db = Db()
-    db.createAccount(input("Username: "), getpass.getpass("Password: "))
+    if db.createAccount(input("Username: "), getpass.getpass("Password: ")):
+        print("Account created.")
+    else:
+        print("There was an error.")
     db.exit()
 def deleteAccount():
-    pass
+    db = Db()
+    if db.deleteAccount(input("Username: ")):
+        print("Account deleted.")
+    else:
+        print("There was an error.")
+    db.exit()
 
 def check(x, action, *args, **kwargs):
     if x:

@@ -57,8 +57,7 @@ class Db:
                 return True
         except sqlite3.OperationalError:
             self.setupDb()
-            return False
-        
+            return False    
     def _encode(self, s):
         s = str(s)
         s = s.encode("utf-8")
