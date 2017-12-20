@@ -66,8 +66,11 @@ def execute(s):
     result = re.findall(r'(?:[Oo]pen|[Ss]tart|[Rr]un) (.*)', s)
     if check(result, start, result): return True
 
-    result = re.findall(r'(?:[Ee]cho|[Pp]rint) (.*)', s)
-    if check(result, echo, result): return True
+    try:
+        result = re.findall(r'(?:[Ee]cho|[Pp]rint) (.*)', s)
+        if check(result, echo, result[0]): return True
+    except IndexError:
+        pass
     
 
     return False
