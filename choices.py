@@ -3,6 +3,7 @@ import webbrowser
 from datetime import datetime
 from db import Db
 import getpass
+import subprocess
 
 # actions    
 def showTime():
@@ -24,6 +25,16 @@ def deleteAccount():
     else:
         print("There was an error.")
     db.exit()
+def listUsers():
+    db = Db()
+    users = db.listUsers()
+    for i in users:
+        print(i)
+def start(x):
+    subprocess.call(("start", x), shell=True)
+def echo(x):
+    print(x)
+        
 
 def check(x, action, *args, **kwargs):
     if x:
@@ -48,6 +59,16 @@ def execute(s):
 
     result = re.findall(r'[Dd]el.*\s+(?:[Uu]ser|[Aa]ccount)', s)
     if check(result, deleteAccount): return True
+
+    result = re.findall(r'(?:[Ll]ist|[Ss]how).*(?:[Uu]ser|[Aa]ccount)', s)
+    if check(result, listUsers): return True
+
+    result = re.findall(r'(?:[Oo]pen|[Ss]tart|[Rr]un) (.*)', s)
+    if check(result, start, result): return True
+
+    result = re.findall(r'(?:[Ee]cho|[Pp]rint) (.*)', s)
+    if check(result, echo, result): return True
+    
 
     return False
     
